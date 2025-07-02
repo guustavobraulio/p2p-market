@@ -210,8 +210,15 @@
         const TELEGRAM_CHANNEL_ID = 'SEU_CHAT_ID_DO_CANAL_AQUI'; // ID do canal público
 
         // Configuração do Firebase
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'p2p-app-default';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "...", authDomain: "...", projectId: "...", ...{} };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'p2p-app-default';        
+        const firebaseConfig = {
+        apiKey: "AIzaSyA3azW55EMYPsygwrahwzmCJlx3CIK9jUM",
+        authDomain: "reserva-almoco-app.firebaseapp.com",
+        projectId: "reserva-almoco-app",
+        storageBucket: "reserva-almoco-app.firebasestorage.app",
+        messagingSenderId: "437144604243",
+        appId: "1:437144604243:web:25c412cc852b8ddefac0a6"
+        };
 
         // Inicialização do Firebase
         const app = initializeApp(firebaseConfig);
