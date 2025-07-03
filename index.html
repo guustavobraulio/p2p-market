@@ -28,7 +28,7 @@
         .copy-btn:active .copy-icon {
             transform: scale(0.9);
         }
-        input[type="number"]::placeholder {
+        input[type="number"]::placeholder, input[type="date"]::placeholder {
             color: #9ca3af;
         }
         fieldset:disabled {
@@ -42,7 +42,6 @@
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-10">
             <div class="flex items-center justify-center gap-4 mb-2">
-                <!-- Logo SVG Criativo -->
                 <svg class="h-12 w-12 text-cyan-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8.5 10.5C9.88071 10.5 11 9.38071 11 8C11 6.61929 9.88071 5.5 8.5 5.5C7.11929 5.5 6 6.61929 6 8C6 9.38071 7.11929 10.5 8.5 10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M15.5 18.5C16.8807 18.5 18 17.3807 18 16C18 14.6193 16.8807 13.5 15.5 13.5C14.1193 13.5 13 14.6193 13 16C13 17.3807 14.1193 18.5 15.5 18.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -70,76 +69,58 @@
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Coluna do Formulário -->
             <div class="lg:col-span-1 bg-gray-800 p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl font-semibold mb-6 border-b border-gray-700 pb-3">Abrir Nova Ordem P2P</h2>
                 
-                <!-- Seção de Integração com Telegram (visível se não integrado) -->
                 <div id="telegram-integration-section" class="hidden">
                     <div class="bg-yellow-900/50 border-l-4 border-yellow-500 text-yellow-300 p-4 rounded-r-lg" role="alert">
                         <p class="font-bold">Ação Necessária</p>
-                        <p class="text-sm">Para criar ordens, você precisa conectar sua conta do Telegram primeiro. Isso garante que você possa ser notificado.</p>
+                        <p class="text-sm">Para criar ordens, conecte sua conta do Telegram.</p>
                     </div>
-                    <div class="mt-4">
-                        <label for="telegram-chat-id" class="block text-sm font-medium text-gray-300 mb-1">Seu Telegram Chat ID</label>
-                        <input type="text" id="telegram-chat-id" placeholder="Ex: 123456789" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
+                    <div class="mt-4 space-y-3">
+                        <div>
+                            <label for="telegram-username" class="block text-sm font-medium text-gray-300 mb-1">Seu nome de usuário no Telegram</label>
+                            <input type="text" id="telegram-username" placeholder="ex: joaosilva (sem @)" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
+                        </div>
+                        <div>
+                            <label for="telegram-chat-id" class="block text-sm font-medium text-gray-300 mb-1">Seu Telegram Chat ID</label>
+                            <input type="text" id="telegram-chat-id" placeholder="Ex: 123456789" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
+                        </div>
                         <button id="connect-telegram-btn" class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-lg transition">Conectar Telegram</button>
                         <p class="text-xs text-gray-500 mt-2">Para obter seu Chat ID, envie /start para o bot <a href="https://t.me/userinfobot" target="_blank" class="text-cyan-400 hover:underline">@userinfobot</a>.</p>
                         <div id="integration-message" class="mt-3 text-center h-5"></div>
                     </div>
                 </div>
                 
-                <!-- Formulário P2P (inicialmente desabilitado) -->
                 <form id="p2p-form" class="hidden">
                     <fieldset id="p2p-fieldset">
                         <div class="space-y-4">
                             <div>
                                 <label for="operationType" class="block text-sm font-medium text-gray-300 mb-1">Tipo de Operação</label>
                                 <select id="operationType" name="operationType" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
-                                    <option value="Cripto x Dinheiro">Cripto x Dinheiro</option>
-                                    <option value="Dinheiro x Cripto">Dinheiro x Cripto</option>
-                                    <option value="Cripto x Pagar Conta">Cripto x Pagar Conta</option>
+                                    <option value="CRIPTO">CRIPTO</option>
+                                    <option value="DINHEIRO">DINHEIRO</option>
+                                    <option value="PAGAR CONTA">PAGAR CONTA</option>
                                 </select>
                             </div>
-
                             <div>
                                 <label for="haveCurrency" class="block text-sm font-medium text-gray-300 mb-1">Eu Tenho</label>
                                 <div class="flex gap-2">
                                     <select id="haveCurrency" name="haveCurrency" required class="w-1/2 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
                                         <option value="USDC">USDC</option>
                                         <option value="USDT">USDT</option>
+                                        <option value="BRL">BRL</option>
                                     </select>
                                     <input type="number" id="haveAmount" name="haveAmount" required placeholder="Valor" min="0" step="0.01" class="w-1/2 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
                                 </div>
                             </div>
-
-                            <div>
-                                <label for="currency" class="block text-sm font-medium text-gray-300 mb-1">Moeda Desejada</label>
-                                <select id="currency" name="currency" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
-                                    <option value="BRL">BRL (Reais)</option>
-                                    <option value="USDC">USDC</option>
-                                    <option value="USDT">USDT</option>
-                                </select>
-                            </div>
-                            <div id="cryptoNetworkWrapper" class="hidden">
-                                <label for="cryptoNetwork" class="block text-sm font-medium text-gray-300 mb-1">Rede (USDC/USDT)</label>
-                                <select id="cryptoNetwork" name="cryptoNetwork" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
-                                    <option value="" disabled selected>Selecione a rede</option>
-                                    <option value="Ethereum (ERC-20)">Ethereum (ERC-20)</option>
-                                    <option value="TRON (TRC-20)">TRON (TRC-20)</option>
-                                    <option value="BNB Smart Chain (BEP-20)">BNB Smart Chain (BEP-20)</option>
-                                    <option value="Polygon (PoS)">Polygon (PoS)</option>
-                                    <option value="Arbitrum One">Arbitrum One</option>
-                                    <option value="Base">Base</option>
-                                    <option value="Optimism">Optimism</option>
-                                    <option value="Avalanche (C-Chain)">Avalanche (C-Chain)</option>
-                                    <option value="Solana">Solana</option>
-                                    <option value="Near Protocol">Near Protocol</option>
-                                </select>
+                             <div>
+                                <label for="deadline" class="block text-sm font-medium text-gray-300 mb-1">Data Limite</label>
+                                <input type="date" id="deadline" name="deadline" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500">
                             </div>
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-300 mb-1">Descrição</label>
-                                <textarea id="description" name="description" rows="4" required placeholder="Detalhes da sua oferta. Ex: 'Pago via PIX.'" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                <textarea id="description" name="description" rows="4" required placeholder="Detalhes da sua oferta. Ex: 'Troco por USDT na rede Polygon, cotação Google.'" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-cyan-500 focus:border-cyan-500"></textarea>
                             </div>
                         </div>
                         <button type="submit" class="w-full mt-6 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
@@ -150,17 +131,13 @@
                 </form>
             </div>
 
-            <!-- Coluna de Ordens e Avaliações -->
             <div class="lg:col-span-2 space-y-8">
-                <!-- Seção de Ordens Abertas -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-3">Ordens Abertas</h2>
                     <div id="orders-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
                         <p class="text-gray-500">Carregando ordens...</p>
                     </div>
                 </div>
-
-                <!-- Seção de Avaliações -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
                     <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-3">Avaliações Recentes</h2>
                     <div id="ratings-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
@@ -171,7 +148,6 @@
         </main>
     </div>
 
-    <!-- Modal de Avaliação -->
     <div id="rating-modal" class="modal fixed inset-0 bg-black bg-opacity-75 items-center justify-center p-4 z-50">
         <div class="bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-md">
             <h2 class="text-2xl font-bold mb-4">Avaliar Usuário</h2>
@@ -200,12 +176,12 @@
     </div>
 
     <script type="module">
-        // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // --- CONFIGURAÇÃO ---
+        // --- CONFIGURAÇÃO DA APLICAÇÃO (TELEGRAM) ---
+        // --- CONFIGURAÇÃO ---a
         const TELEGRAM_BOT_TOKEN = '8081345771:AAHgC-pmiT6K1fd3CnQq4Q4AD6GOWB0-ZvM'; 
         const TELEGRAM_CHANNEL_ID = '@p2pmarket_now'; // ID do canal público
 
@@ -220,51 +196,119 @@
         appId: "1:424573852132:web:7ac2b402ed7e584fb40ff1"
         };
 
-
-        // Inicialização do Firebase
+        // --- INICIALIZAÇÃO ---
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Referências das coleções
         const ordersCollection = collection(db, `/artifacts/${appId}/public/data/p2p_orders`);
         const ratingsCollection = collection(db, `/artifacts/${appId}/public/data/user_ratings`);
         const profilesCollection = collection(db, `/artifacts/${appId}/public/data/user_profiles`);
 
-        // Estado da aplicação
         let currentUser = null;
+        let userProfile = null;
         let orderToRate = null;
         let currentOrders = [];
         let userAggregatedRatings = {};
 
+        // --- ELEMENTOS DO DOM ---
+        const p2pForm = document.getElementById('p2p-form');
+        const p2pFieldset = document.getElementById('p2p-fieldset');
+        const telegramIntegrationSection = document.getElementById('telegram-integration-section');
+        const connectTelegramBtn = document.getElementById('connect-telegram-btn');
+        const telegramUsernameInput = document.getElementById('telegram-username');
+        const telegramChatIdInput = document.getElementById('telegram-chat-id');
+        const integrationMessage = document.getElementById('integration-message');
+        const formMessage = document.getElementById('form-message');
+        const ordersList = document.getElementById('orders-list');
+        const ratingsList = document.getElementById('ratings-list');
+        const userIdDisplay = document.getElementById('userId');
+        const copyUserIdBtn = document.getElementById('copy-user-id');
+        const copyFeedback = document.getElementById('copy-feedback');
+        const exchangeRateDisplay = document.getElementById('exchange-rate');
+        const ratingModal = document.getElementById('rating-modal');
+        const ratingForm = document.getElementById('rating-form');
+        const cancelRatingBtn = document.getElementById('cancel-rating');
+        const deadlineInput = document.getElementById('deadline');
+
         // --- LÓGICA DE UI ---
-        function enableTradingForm(p2pForm, p2pFieldset, telegramIntegrationSection) {
+        function enableTradingForm() {
             telegramIntegrationSection.classList.add('hidden');
             p2pForm.classList.remove('hidden');
             p2pFieldset.disabled = false;
         }
 
-        function showIntegrationStep(p2pForm, telegramIntegrationSection) {
+        function showIntegrationStep() {
             telegramIntegrationSection.classList.remove('hidden');
             p2pForm.classList.add('hidden');
+        }
+
+        // --- AUTENTICAÇÃO E VERIFICAÇÃO DE PERFIL ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                userIdDisplay.textContent = user.uid;
+                
+                const profileRef = doc(db, profilesCollection.path, user.uid);
+                const profileSnap = await getDoc(profileRef);
+
+                if (profileSnap.exists() && profileSnap.data().telegramChatId) {
+                    userProfile = profileSnap.data();
+                    enableTradingForm();
+                } else {
+                    showIntegrationStep();
+                }
+
+                listenForRatings();
+                listenForOrders();
+            }
+        });
+
+        async function initializeAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                userIdDisplay.textContent = "Erro de autenticação";
+            }
         }
         
         // --- LÓGICA PRINCIPAL ---
 
-        async function fetchExchangeRate(exchangeRateDisplay) {
+        async function fetchExchangeRate() {
             try {
                 const response = await fetch('https://open.er-api.com/v6/latest/USD');
                 if (!response.ok) throw new Error('A resposta da rede não foi bem-sucedida');
                 const data = await response.json();
                 const brlRate = data.rates.BRL;
-                exchangeRateDisplay.innerHTML = `
-                    <p class="text-sm">Cotação: <span class="font-bold text-green-400">1 USD ≈ R$ ${brlRate.toFixed(2)}</span></p>
-                `;
+                exchangeRateDisplay.innerHTML = `<p class="text-sm">Cotação: <span class="font-bold text-green-400">1 USD ≈ R$ ${brlRate.toFixed(2)}</span></p>`;
             } catch (error) {
                 console.error("Erro ao buscar cotação:", error);
                 exchangeRateDisplay.textContent = 'Cotação indisponível.';
             }
         }
+
+        copyUserIdBtn.addEventListener('click', () => {
+             if (!currentUser) return;
+            const textToCopy = currentUser.uid;
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                copyFeedback.textContent = 'ID copiado!';
+            } catch (err) {
+                console.error('Falha ao copiar: ', err);
+                copyFeedback.textContent = 'Falha ao copiar.';
+            }
+            document.body.removeChild(textArea);
+            setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
+        });
 
         async function sendTelegramMessage(chatId, message) {
             if (TELEGRAM_BOT_TOKEN === 'SEU_TOKEN_DE_BOT_DO_TELEGRAM_AQUI') {
@@ -287,9 +331,108 @@
             }
         }
 
-        function renderOrders(orders, ordersList) {
+        connectTelegramBtn.addEventListener('click', async () => {
+            const chatId = telegramChatIdInput.value.trim();
+            const username = telegramUsernameInput.value.trim().replace('@', '');
+
+            if (!chatId || !username) {
+                integrationMessage.innerHTML = `<p class="text-red-500">Preencha o nome de usuário e o Chat ID.</p>`;
+                return;
+            }
+            if (!currentUser) {
+                integrationMessage.innerHTML = `<p class="text-red-500">Erro de autenticação. Recarregue a página.</p>`;
+                return;
+            }
+
+            integrationMessage.innerHTML = `<p class="text-blue-400">Verificando...</p>`;
+            
+            const welcomeMessage = `Olá, <b>${username}</b>! 👋\nSua conta na <b>PonteP2P</b> foi conectada com sucesso.\nSeu User ID é: <code>${currentUser.uid}</code>`;
+            const result = await sendTelegramMessage(chatId, welcomeMessage);
+
+            if (result.ok) {
+                integrationMessage.innerHTML = `<p class="text-green-400">Telegram conectado com sucesso!</p>`;
+                const profileData = { telegramChatId: chatId, telegramUsername: username };
+                const profileRef = doc(db, profilesCollection.path, currentUser.uid);
+                await setDoc(profileRef, profileData);
+                userProfile = profileData;
+                setTimeout(enableTradingForm, 1500);
+            } else {
+                integrationMessage.innerHTML = `<p class="text-red-500">Falha ao conectar. Verifique os dados e se você iniciou o bot.</p>`;
+            }
+        });
+
+        p2pForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            formMessage.innerHTML = `<p class="text-blue-400">Enviando ordem...</p>`;
+            const formData = new FormData(p2pForm);
+            
+            const haveAmount = parseFloat(formData.get('haveAmount'));
+            const haveCurrency = formData.get('haveCurrency');
+            
+            const orderData = {
+                operationType: formData.get('operationType'),
+                haveCurrency: haveCurrency,
+                haveAmount: haveAmount,
+                deadline: formData.get('deadline'),
+                description: formData.get('description'),
+                createdBy: currentUser.uid,
+                creatorUsername: userProfile.telegramUsername,
+                createdAt: new Date(),
+                status: 'aberta' // aberta, finalizada, cancelada
+            };
+
+            const valorFormatado = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: haveCurrency === 'BRL' ? 'BRL' : 'USD' }).format(haveAmount);
+
+            try {
+                const docRef = await addDoc(ordersCollection, orderData);
+                const appUrl = window.location.href; // URL base da aplicação
+                
+                const telegramMessage = `Nova operação criada por ${orderData.creatorUsername}:\n\n` +
+                                      `<b>Tipo:</b> ${orderData.operationType}\n` +
+                                      `<b>Valor:</b> ${valorFormatado}\n` +
+                                      `<b>Descrição:</b> ${orderData.description}\n` +
+                                      `<b>Data Limite:</b> ${new Date(orderData.deadline).toLocaleDateString('pt-BR', {timeZone: 'UTC'})}\n\n` +
+                                      `Para mais detalhes, acesse: ${appUrl}\n\n` +
+                                      `<a href="https://t.me/${orderData.creatorUsername}">Clique AQUI para iniciar um chat privado com ${orderData.creatorUsername}</a>.\n` +
+                                      `<a href="${appUrl}">Clique AQUI para avaliar ${orderData.creatorUsername}</a>.`;
+
+                
+                const notificationResult = await sendTelegramMessage(TELEGRAM_CHANNEL_ID, telegramMessage);
+                if(notificationResult.ok) {
+                    formMessage.innerHTML = `<p class="text-green-400">Ordem criada e notificada com sucesso!</p>`;
+                } else {
+                     formMessage.innerHTML = `<p class="text-yellow-400">Ordem criada, mas falhou ao notificar no canal.</p>`;
+                }
+
+                p2pForm.reset();
+                deadlineInput.valueAsDate = new Date();
+            } catch (error) {
+                console.error("Erro ao criar ordem:", error);
+                formMessage.innerHTML = `<p class="text-red-500">Falha ao criar ordem. Tente novamente.</p>`;
+            } finally {
+                setTimeout(() => formMessage.innerHTML = '', 4000);
+            }
+        });
+
+        function listenForOrders() {
+            const q = query(ordersCollection, where("status", "==", "aberta"));
+            onSnapshot(q, (snapshot) => {
+                currentOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                currentOrders.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+                renderOrders();
+            }, (error) => {
+                console.error("Erro ao buscar ordens:", error);
+                ordersList.innerHTML = '<p class="text-red-500">Erro ao carregar as ordens.</p>';
+            });
+        }
+
+        function renderOrders() {
+            if (currentOrders.length === 0) {
+                ordersList.innerHTML = '<p class="text-gray-500">Nenhuma ordem aberta no momento.</p>';
+                return;
+            }
             ordersList.innerHTML = '';
-            orders.forEach(order => {
+            currentOrders.forEach(order => {
                 const orderCard = document.createElement('div');
                 orderCard.className = 'bg-gray-700 p-4 rounded-lg shadow-md';
                 const createdAt = order.createdAt.toDate().toLocaleString('pt-BR');
@@ -298,20 +441,26 @@
                 const ratingInfo = userAggregatedRatings[creatorId];
                 let ratingHTML = '<p class="text-xs text-gray-500">Sem avaliações</p>';
                 if (ratingInfo) {
-                    ratingHTML = `
-                        <div class="flex items-center gap-2" title="Reputação do usuário">
-                            <span class="text-amber-400 font-bold">${ratingInfo.average} ★</span>
-                            <span class="text-xs text-gray-400">(${ratingInfo.count} ${ratingInfo.count === 1 ? 'avaliação' : 'avaliações'})</span>
-                        </div>
-                    `;
+                    ratingHTML = `<div class="flex items-center gap-2" title="Reputação do usuário"><span class="text-amber-400 font-bold">${ratingInfo.average} ★</span><span class="text-xs text-gray-400">(${ratingInfo.count} ${ratingInfo.count === 1 ? 'avaliação' : 'avaliações'})</span></div>`;
                 }
                 
+                let actionButtons = '';
+                if (currentUser && currentUser.uid === order.createdBy) {
+                    actionButtons = `
+                        <div class="flex gap-2 mt-4">
+                            <button data-order-id="${order.id}" class="complete-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-lg text-sm transition">Concluir Ordem</button>
+                            <button data-order-id="${order.id}" class="cancel-order-btn w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg text-sm transition">Cancelar Ordem</button>
+                        </div>
+                    `;
+                } else if (currentUser) {
+                     actionButtons = `<button data-order-id="${order.id}" data-user-id="${order.createdBy}" class="finalize-btn mt-4 w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition">Finalizar e Avaliar</button>`;
+                }
+
                 orderCard.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-sm text-cyan-400 font-semibold">${order.operationType}</p>
-                            <p class="text-lg font-bold">Oferece: ${order.haveAmount} ${order.haveCurrency}</p>
-                            <p class="text-md font-medium text-gray-300">Deseja: ${order.currency} ${order.cryptoNetwork ? `(${order.cryptoNetwork})` : ''}</p>
+                            <p class="text-lg font-bold">Oferece: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: order.haveCurrency === 'BRL' ? 'BRL' : 'USD' }).format(order.haveAmount)} ${order.haveCurrency}</p>
                         </div>
                         <span class="text-xs text-gray-400">${createdAt}</span>
                     </div>
@@ -319,21 +468,101 @@
                     <div class="mt-4 pt-3 border-t border-gray-600 flex justify-between items-center">
                          <div class="text-xs">
                             <p class="text-gray-500">Criado por:</p>
-                            <code class="bg-gray-800 p-1 rounded text-gray-300">${order.createdBy.substring(0, 10)}...</code>
+                            <code class="bg-gray-800 p-1 rounded text-gray-300">${order.creatorUsername}</code>
                          </div>
                          ${ratingHTML}
                     </div>
-                    ${currentUser && currentUser.uid !== order.createdBy ? `
-                    <button data-order-id="${order.id}" data-user-id="${order.createdBy}" class="finalize-btn mt-4 w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition">
-                        Finalizar e Avaliar
-                    </button>
-                    ` : ''}
+                    ${actionButtons}
                 `;
                 ordersList.appendChild(orderCard);
             });
         }
+        
+        ordersList.addEventListener('click', async (e) => {
+            const target = e.target;
+            const orderId = target.dataset.orderId;
 
-        function renderRatings(ratings, ratingsList) {
+            if (!orderId) return;
+
+            if (target.classList.contains('finalize-btn')) {
+                orderToRate = { 
+                    orderId: orderId, 
+                    userIdToRate: target.dataset.userId 
+                };
+                ratingModal.classList.add('is-open');
+            } else if (target.classList.contains('complete-btn')) {
+                const orderRef = doc(db, ordersCollection.path, orderId);
+                await updateDoc(orderRef, { status: 'finalizada' });
+            } else if (target.classList.contains('cancel-order-btn')) {
+                const orderRef = doc(db, ordersCollection.path, orderId);
+                await updateDoc(orderRef, { status: 'cancelada' });
+            }
+        });
+
+        cancelRatingBtn.addEventListener('click', () => {
+            ratingModal.classList.remove('is-open');
+            ratingForm.reset();
+            orderToRate = null;
+        });
+
+        ratingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!orderToRate || !currentUser) return;
+
+            const formData = new FormData(ratingForm);
+            const ratingData = {
+                ratedUserId: orderToRate.userIdToRate,
+                ratedBy: currentUser.uid,
+                orderId: orderToRate.orderId,
+                rating: parseInt(formData.get('rating')),
+                comment: formData.get('rating-comment') || '',
+                createdAt: new Date()
+            };
+
+            try {
+                await addDoc(ratingsCollection, ratingData);
+                const orderRef = doc(db, ordersCollection.path, orderToRate.orderId);
+                await updateDoc(orderRef, { status: 'finalizada' });
+                ratingModal.classList.remove('is-open');
+                ratingForm.reset();
+                orderToRate = null;
+            } catch (error) {
+                console.error("Erro ao salvar avaliação:", error);
+            }
+        });
+
+        function listenForRatings() {
+            onSnapshot(ratingsCollection, (snapshot) => {
+                const ratings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const aggregated = {};
+                ratings.forEach(r => {
+                    if (!aggregated[r.ratedUserId]) {
+                        aggregated[r.ratedUserId] = { total: 0, count: 0 };
+                    }
+                    aggregated[r.ratedUserId].total += r.rating;
+                    aggregated[r.ratedUserId].count++;
+                });
+
+                for (const userId in aggregated) {
+                    aggregated[userId].average = (aggregated[userId].total / aggregated[userId].count).toFixed(1);
+                }
+                userAggregatedRatings = aggregated;
+
+                ratings.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+                renderRatings(ratings);
+
+                if (currentOrders.length > 0) {
+                    renderOrders();
+                }
+
+            }, (error) => {
+                console.error("Erro ao buscar avaliações:", error);
+                ratingsList.innerHTML = '<p class="text-red-500">Erro ao carregar as avaliações.</p>';
+            });
+        }
+        
+        function renderRatings(ratings) {
             if (ratings.length === 0) {
                  ratingsList.innerHTML = '<p class="text-gray-500">Nenhuma avaliação foi feita ainda.</p>';
                  return;
@@ -358,254 +587,11 @@
                 ratingsList.appendChild(ratingCard);
             });
         }
-        
+
         document.addEventListener('DOMContentLoaded', () => {
-            // --- ELEMENTOS DO DOM ---
-            const p2pForm = document.getElementById('p2p-form');
-            const p2pFieldset = document.getElementById('p2p-fieldset');
-            const telegramIntegrationSection = document.getElementById('telegram-integration-section');
-            const connectTelegramBtn = document.getElementById('connect-telegram-btn');
-            const telegramChatIdInput = document.getElementById('telegram-chat-id');
-            const integrationMessage = document.getElementById('integration-message');
-            const currencySelect = document.getElementById('currency');
-            const cryptoNetworkWrapper = document.getElementById('cryptoNetworkWrapper');
-            const formMessage = document.getElementById('form-message');
-            const ordersList = document.getElementById('orders-list');
-            const ratingsList = document.getElementById('ratings-list');
-            const userIdDisplay = document.getElementById('userId');
-            const copyUserIdBtn = document.getElementById('copy-user-id');
-            const copyFeedback = document.getElementById('copy-feedback');
-            const exchangeRateDisplay = document.getElementById('exchange-rate');
-            const ratingModal = document.getElementById('rating-modal');
-            const ratingForm = document.getElementById('rating-form');
-            const cancelRatingBtn = document.getElementById('cancel-rating');
-
-            // --- AUTENTICAÇÃO E VERIFICAÇÃO DE PERFIL ---
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    currentUser = user;
-                    userIdDisplay.textContent = user.uid;
-                    
-                    const profileRef = doc(db, profilesCollection.path, user.uid);
-                    const profileSnap = await getDoc(profileRef);
-
-                    if (profileSnap.exists() && profileSnap.data().telegramChatId) {
-                        enableTradingForm(p2pForm, p2pFieldset, telegramIntegrationSection);
-                    } else {
-                        showIntegrationStep(p2pForm, telegramIntegrationSection);
-                    }
-
-                    listenForRatings();
-                    listenForOrders();
-                }
-            });
-
-            async function initializeAuth() {
-                try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) {
-                    console.error("Erro na autenticação:", error);
-                    userIdDisplay.textContent = "Erro de autenticação";
-                }
-            }
-
-            function listenForOrders() {
-                const q = query(ordersCollection, where("status", "==", "aberta"));
-                onSnapshot(q, (snapshot) => {
-                    if (snapshot.empty) {
-                        ordersList.innerHTML = '<p class="text-gray-500">Nenhuma ordem aberta no momento.</p>';
-                        return;
-                    }
-                    currentOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    currentOrders.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
-                    renderOrders(currentOrders, ordersList);
-                }, (error) => {
-                    console.error("Erro ao buscar ordens:", error);
-                    ordersList.innerHTML = '<p class="text-red-500">Erro ao carregar as ordens.</p>';
-                });
-            }
-
-            function listenForRatings() {
-                onSnapshot(ratingsCollection, (snapshot) => {
-                    const ratings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    
-                    const aggregated = {};
-                    ratings.forEach(r => {
-                        if (!aggregated[r.ratedUserId]) {
-                            aggregated[r.ratedUserId] = { total: 0, count: 0 };
-                        }
-                        aggregated[r.ratedUserId].total += r.rating;
-                        aggregated[r.ratedUserId].count++;
-                    });
-
-                    for (const userId in aggregated) {
-                        aggregated[userId].average = (aggregated[userId].total / aggregated[userId].count).toFixed(1);
-                    }
-                    userAggregatedRatings = aggregated;
-
-                    ratings.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
-                    renderRatings(ratings, ratingsList);
-
-                    if (currentOrders.length > 0) {
-                        renderOrders(currentOrders, ordersList);
-                    }
-
-                }, (error) => {
-                    console.error("Erro ao buscar avaliações:", error);
-                    ratingsList.innerHTML = '<p class="text-red-500">Erro ao carregar as avaliações.</p>';
-                });
-            }
-
-            // --- LISTENERS DE EVENTOS ---
-            copyUserIdBtn.addEventListener('click', () => {
-                if (!currentUser) return;
-                const textToCopy = currentUser.uid;
-                
-                const textArea = document.createElement("textarea");
-                textArea.value = textToCopy;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    copyFeedback.textContent = 'ID copiado!';
-                } catch (err) {
-                    console.error('Falha ao copiar: ', err);
-                    copyFeedback.textContent = 'Falha ao copiar.';
-                }
-                document.body.removeChild(textArea);
-
-                setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
-            });
-
-            connectTelegramBtn.addEventListener('click', async () => {
-                const chatId = telegramChatIdInput.value.trim();
-                if (!chatId) {
-                    integrationMessage.innerHTML = `<p class="text-red-500">Por favor, insira um Chat ID.</p>`;
-                    return;
-                }
-                if (!currentUser) {
-                    integrationMessage.innerHTML = `<p class="text-red-500">Erro de autenticação. Recarregue a página.</p>`;
-                    return;
-                }
-
-                integrationMessage.innerHTML = `<p class="text-blue-400">Verificando...</p>`;
-                
-                const welcomeMessage = `Olá! 👋\nSua conta na <b>PonteP2P</b> foi conectada com sucesso.\nSeu User ID é: <code>${currentUser.uid}</code>`;
-                const result = await sendTelegramMessage(chatId, welcomeMessage);
-
-                if (result.ok) {
-                    integrationMessage.innerHTML = `<p class="text-green-400">Telegram conectado com sucesso!</p>`;
-                    const profileRef = doc(db, profilesCollection.path, currentUser.uid);
-                    await setDoc(profileRef, { telegramChatId: chatId });
-                    setTimeout(() => enableTradingForm(p2pForm, p2pFieldset, telegramIntegrationSection), 1500);
-                } else {
-                    integrationMessage.innerHTML = `<p class="text-red-500">Falha ao conectar. Verifique o Chat ID e se você iniciou o bot.</p>`;
-                }
-            });
-
-            p2pForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                formMessage.innerHTML = `<p class="text-blue-400">Enviando ordem...</p>`;
-                const formData = new FormData(p2pForm);
-                const orderData = {
-                    operationType: formData.get('operationType'),
-                    haveCurrency: formData.get('haveCurrency'),
-                    haveAmount: parseFloat(formData.get('haveAmount')),
-                    currency: formData.get('currency'),
-                    cryptoNetwork: formData.get('currency') === 'BRL' ? '' : formData.get('cryptoNetwork'),
-                    description: formData.get('description'),
-                    createdBy: currentUser.uid,
-                    createdAt: new Date(),
-                    status: 'aberta'
-                };
-
-                try {
-                    const docRef = await addDoc(ordersCollection, orderData);
-                    const telegramMessage = `
-    <b>Nova Ordem na PonteP2P!</b>
-    -----------------------------------
-    <b>Operação:</b> ${orderData.operationType}
-    <b>Oferece:</b> ${orderData.haveAmount} ${orderData.haveCurrency}
-    <b>Deseja:</b> ${orderData.currency}
-    ${orderData.cryptoNetwork ? `<b>Rede:</b> ${orderData.cryptoNetwork}` : ''}
-    <b>Descrição:</b> <i>${orderData.description}</i>
-    -----------------------------------
-    <b>Usuário:</b> <code>${orderData.createdBy}</code>
-                    `;
-                    
-                    const notificationResult = await sendTelegramMessage(TELEGRAM_CHANNEL_ID, telegramMessage.trim());
-                    if(notificationResult.ok) {
-                        formMessage.innerHTML = `<p class="text-green-400">Ordem criada e notificada com sucesso!</p>`;
-                    } else {
-                         formMessage.innerHTML = `<p class="text-yellow-400">Ordem criada, mas falhou ao notificar no canal.</p>`;
-                    }
-
-                    p2pForm.reset();
-                    currencySelect.dispatchEvent(new Event('change'));
-                } catch (error) {
-                    console.error("Erro ao criar ordem:", error);
-                    formMessage.innerHTML = `<p class="text-red-500">Falha ao criar ordem. Tente novamente.</p>`;
-                } finally {
-                    setTimeout(() => formMessage.innerHTML = '', 4000);
-                }
-            });
-
-            currencySelect.addEventListener('change', () => {
-                cryptoNetworkWrapper.classList.toggle('hidden', currencySelect.value !== 'USDC' && currencySelect.value !== 'USDT');
-            });
-
-            ordersList.addEventListener('click', (e) => {
-                if (e.target.classList.contains('finalize-btn')) {
-                    orderToRate = { 
-                        orderId: e.target.dataset.orderId, 
-                        userIdToRate: e.target.dataset.userId 
-                    };
-                    ratingModal.classList.add('is-open');
-                }
-            });
-
-            cancelRatingBtn.addEventListener('click', () => {
-                ratingModal.classList.remove('is-open');
-                ratingForm.reset();
-                orderToRate = null;
-            });
-
-            ratingForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!orderToRate || !currentUser) return;
-
-                const formData = new FormData(ratingForm);
-                const ratingData = {
-                    ratedUserId: orderToRate.userIdToRate,
-                    ratedBy: currentUser.uid,
-                    orderId: orderToRate.orderId,
-                    rating: parseInt(formData.get('rating')),
-                    comment: formData.get('rating-comment') || '',
-                    createdAt: new Date()
-                };
-
-                try {
-                    await addDoc(ratingsCollection, ratingData);
-                    
-                    const orderRef = doc(db, `/artifacts/${appId}/public/data/p2p_orders`, orderToRate.orderId);
-                    await setDoc(orderRef, { status: 'finalizada' }, { merge: true });
-
-                    console.log('Avaliação enviada com sucesso!');
-                    ratingModal.classList.remove('is-open');
-                    ratingForm.reset();
-                    orderToRate = null;
-                } catch (error) {
-                    console.error("Erro ao salvar avaliação:", error);
-                }
-            });
-
-            // --- INICIALIZAÇÃO ---
+            deadlineInput.valueAsDate = new Date();
             initializeAuth();
-            fetchExchangeRate(exchangeRateDisplay);
+            fetchExchangeRate();
         });
 
     </script>
