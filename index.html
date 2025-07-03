@@ -210,8 +210,16 @@
         const TELEGRAM_CHANNEL_ID = 'SEU_CHAT_ID_DO_CANAL_AQUI'; // ID do canal público
 
         // Configuração do Firebase
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'p2p-app-default';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "...", authDomain: "...", projectId: "...", ...{} };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'p2p-app-default';        
+        const firebaseConfig = {
+        apiKey: "AIzaSyAVCyEEI8zGu6VFJU26UOyClPoKCcrXCmg",
+        authDomain: "p2p-market-14813.firebaseapp.com",
+        projectId: "p2p-market-14813",
+        storageBucket: "p2p-market-14813.firebasestorage.app",
+        messagingSenderId: "424573852132",
+        appId: "1:424573852132:web:7ac2b402ed7e584fb40ff1"
+        };
+
 
         // Inicialização do Firebase
         const app = initializeApp(firebaseConfig);
